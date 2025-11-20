@@ -2,23 +2,7 @@
 
 A full-stack web application for analyzing healthcare claims and detecting potential fraud using a custom heuristic-based scoring system.
 
-**Live Demo**: [Deployed on Replit](#)
-
-## 📋 Table of Contents
-
-- [Project Overview](#project-overview)
-- [Architecture](#architecture)
-- [Fraud Likelihood Score Heuristic](#fraud-likelihood-score-heuristic)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Database Schema](#database-schema)
-- [API Endpoints](#api-endpoints)
-- [System Design](#system-design)
-- [Scalability Considerations](#scalability-considerations)
-- [AI Prompt Journal](#ai-prompt-journal)
-- [Management Deliverables](#management-deliverables)
-
----
+**Live Demo**: 
 
 ## 🎯 Project Overview
 
@@ -33,7 +17,6 @@ The NHIS Fraud Auditor Dashboard is a rapid MVP prototype built to help claims a
 ✅ **RESTful API**: Clean Django REST Framework backend  
 ✅ **Modern UI**: React with Tailwind CSS and Chart.js visualizations
 
----
 
 ## 🏗️ Architecture
 
@@ -54,7 +37,8 @@ The NHIS Fraud Auditor Dashboard is a rapid MVP prototype built to help claims a
  React Router                  Pandas (CSV Import)
 ```
 
-### Component Breakdown
+
+## Component Breakdown
 
 **Backend (Django)**
 - `claims/models.py`: Data models for Claims
@@ -68,8 +52,6 @@ The NHIS Fraud Auditor Dashboard is a rapid MVP prototype built to help claims a
 - `ClaimsList.jsx`: Paginated table with search/filter
 - `api.js`: Axios service layer for API calls
 
----
-
 ## 🔍 Fraud Likelihood Score Heuristic
 
 ### Formula Overview
@@ -81,6 +63,7 @@ Final Score = (Amount Variance × 0.40) +
               (Provider Frequency × 0.30) + 
               (Diagnosis Complexity × 0.30)
 ```
+
 
 ### Component Details
 
@@ -149,6 +132,7 @@ else:                          complexity_score += 10
 
 ---
 
+
 ## 🛠️ Tech Stack
 
 ### Backend
@@ -169,11 +153,6 @@ else:                          complexity_score += 10
 - **React-ChartJS-2** - Chart.js React wrapper
 - **Tailwind CSS 3.4** - Utility-first CSS
 
-### DevOps
-- **Replit** - Deployment platform
-- **Git** - Version control
-
----
 
 ## 🚀 Getting Started
 
@@ -209,28 +188,6 @@ npm install
 ```bash
 cd backend
 python manage.py load_claims ../data/sample_claims.csv
-```
-
-### Download Real Kaggle Dataset
-
-1. Go to [Kaggle NHIS Healthcare Claims Dataset](https://www.kaggle.com/)
-2. Search for "NHIS Healthcare Claims and Fraud Dataset"
-3. Download the CSV file
-4. Place it in the `data/` directory
-5. Load using: `python manage.py load_claims data/your_file.csv`
-
-### Run Development Servers
-
-**Backend** (Terminal 1):
-```bash
-cd backend
-gunicorn --bind 0.0.0.0:8000 --workers 2 nhis_fraud_auditor.wsgi:application
-```
-
-**Frontend** (Terminal 2):
-```bash
-cd frontend
-npm run dev
 ```
 
 Access the application at: `http://localhost:5000`
@@ -300,74 +257,6 @@ ORDER BY fraud_score DESC;
 
 ---
 
-## 📡 API Endpoints
-
-### Base URL
-```
-http://localhost:8000/api/
-```
-
-### Endpoints
-
-#### 1. Dashboard Metrics
-```http
-GET /api/claims/dashboard_metrics/
-```
-
-**Response:**
-```json
-{
-  "total_claims": 30,
-  "average_claim_amount": "8456.67",
-  "high_risk_claims_count": 2,
-  "high_risk_claims_percentage": "6.67",
-  "fraud_score_distribution": {
-    "Low (0-25)": 25,
-    "Medium (26-75)": 3,
-    "High (76-100)": 2
-  }
-}
-```
-
-#### 2. List Claims (Paginated)
-```http
-GET /api/claims/?page=1
-```
-
-**Query Parameters:**
-- `page` - Page number (default: 1)
-- `search` - Search term
-- `diagnosis` - Filter by diagnosis code
-- `patient_id` - Filter by patient ID
-- `provider_id` - Filter by provider ID
-- `min_score` - Minimum fraud score
-- `max_score` - Maximum fraud score
-
-**Response:**
-```json
-{
-  "count": 30,
-  "next": "http://localhost:8000/api/claims/?page=2",
-  "previous": null,
-  "results": [
-    {
-      "id": 1,
-      "claim_id": "CLM001",
-      "patient_id": "PAT001",
-      "provider_id": "PROV001",
-      "diagnosis_code": "J00",
-      "diagnosis_description": "Acute nasopharyngitis",
-      "claim_amount": "150.00",
-      "claim_date": "2024-01-15",
-      "fraud_score": 18,
-      "fraud_risk_level": "Low"
-    }
-  ]
-}
-```
-
----
-
 ## 🎨 System Design
 
 ### Design Principles
@@ -409,140 +298,10 @@ The application includes comprehensive logging:
 - Levels: INFO, DEBUG, WARNING, ERROR
 - Format: `{levelname} {asctime} {module} {message}`
 
-**View Logs:**
-```bash
-# Real-time backend logs
-tail -f backend/debug.log
 
-# Filter for errors
-grep ERROR backend/debug.log
 
-# View fraud calculations
-grep "Component scores" backend/debug.log
-```
 
----
 
-## 📈 Scalability Considerations
-
-### Current MVP Limitations
-
-| Component | Current Limit | Bottleneck |
-|-----------|--------------|------------|
-| Database | ~100K claims | SQLite write locks |
-| API Throughput | ~50 req/sec | Single Gunicorn worker |
-| Frontend | N/A | Client-side only |
-
-### Path to 1000 Requests/Second
-
-#### 1. Database Migration
-```
-SQLite → PostgreSQL
-```
-**Changes Required:**
-- Update `settings.py` database config
-- Add connection pooling (pgBouncer)
-- Partition tables by date range
-- Add read replicas for dashboard queries
-
-**Estimated Capacity:** 500-800 req/sec
-
-#### 2. Backend Scaling
-```
-Single Server → Load Balanced Cluster
-```
-**Changes Required:**
-- Deploy on Kubernetes/AWS ECS
-- Horizontal scaling: 5-10 Gunicorn instances
-- Redis for caching dashboard metrics (TTL: 5 min)
-- Celery for async fraud score calculations
-
-**Estimated Capacity:** 1000-1500 req/sec
-
-#### 3. API Optimization
-```python
-# Add caching decorator
-from django.views.decorators.cache import cache_page
-
-@cache_page(60 * 5)  # Cache for 5 minutes
-@action(detail=False, methods=['get'])
-def dashboard_metrics(self, request):
-    ...
-```
-
-**Changes Required:**
-- Implement Redis caching layer
-- Add database query optimization (select_related, prefetch_related)
-- Pagination cursor instead of offset (for large datasets)
-- API rate limiting (django-ratelimit)
-
-#### 4. Frontend Optimization
-```
-Single React App → CDN + Static Hosting
-```
-**Changes Required:**
-- Deploy static assets to CDN (CloudFront, Cloudflare)
-- Implement code splitting for routes
-- Add service worker for offline capability
-- Lazy load Chart.js components
-
-#### 5. Infrastructure Architecture (Production)
-
-```
-                   ┌──────────────┐
-                   │  CloudFront  │ (CDN for static assets)
-                   │     CDN      │
-                   └──────┬───────┘
-                          │
-                   ┌──────▼───────┐
-                   │     ALB      │ (Application Load Balancer)
-                   │ Load Balancer│
-                   └──────┬───────┘
-                          │
-         ┌────────────────┼────────────────┐
-         │                │                │
-    ┌────▼───┐       ┌────▼───┐      ┌────▼───┐
-    │ Django │       │ Django │      │ Django │ (Auto-scaling group)
-    │ App 1  │       │ App 2  │      │ App N  │
-    └────┬───┘       └────┬───┘      └────┬───┘
-         │                │                │
-         └────────────────┼────────────────┘
-                          │
-                   ┌──────▼───────┐
-                   │    Redis     │ (Cache layer)
-                   └──────────────┘
-                          │
-                   ┌──────▼───────┐
-                   │  PostgreSQL  │ (Primary DB with replicas)
-                   │  + Replicas  │
-                   └──────────────┘
-```
-
-### Cost-Benefit Analysis
-
-| Approach | Cost/Month | Capacity | Implementation Time |
-|----------|-----------|----------|-------------------|
-| MVP (Current) | $0 | 50 req/sec | Complete |
-| PostgreSQL + Cache | $50 | 500 req/sec | 1 week |
-| Load Balanced | $200 | 1000 req/sec | 2-3 weeks |
-| Full Production | $500+ | 5000+ req/sec | 4-6 weeks |
-
----
-
-## 🤖 AI Prompt Journal
-
-### Most Effective Prompts Used
-
-#### 1. Database Schema Design
-**Prompt:**
-> "Design a Django model for healthcare claims with the following fields: claim ID, patient ID, provider ID, diagnosis code, procedure code, claim amount, claim date, and fraud score. Include appropriate indexes for filtering by fraud score, date, patient, and provider. Add a property method for risk level categorization."
-
-**Output Used For:**
-Created `claims/models.py` with optimized indexing strategy. Added `fraud_risk_level` property for UI display.
-
-**Impact:** Reduced query time for filtered claims by ~60% through strategic indexing.
-
----
 
 #### 2. Fraud Heuristic Logic
 **Prompt:**
@@ -551,9 +310,7 @@ Created `claims/models.py` with optimized indexing strategy. Added `fraud_risk_l
 **Output Used For:**
 Built `claims/fraud_engine.py` with the `FraudScoreEngine` class. Refined scoring thresholds based on sample data testing.
 
-**Impact:** Core business logic implemented in under 30 minutes with clear, maintainable code.
 
----
 
 #### 3. React Dashboard Component
 **Prompt:**
@@ -566,72 +323,8 @@ Generated `Dashboard.jsx` with complete Chart.js integration. Added responsive g
 
 ---
 
-#### 4. Unit Testing for Fraud Score
-**Prompt:**
-> "Write pytest unit tests for a fraud score calculation function that takes claim amount, provider stats, and diagnosis stats as input. Test edge cases including: zero amounts, missing provider data, extreme variance ratios (>3x and <0.5x average), and null values. Include fixtures for sample data."
 
-**Output Used For:**
-Generated comprehensive test suite (would be in `tests/test_fraud_engine.py` if implemented).
 
-**Code Snippet:**
-```python
-import pytest
-from claims.fraud_engine import FraudScoreEngine
-
-@pytest.fixture
-def engine():
-    return FraudScoreEngine()
-
-@pytest.fixture
-def sample_claim():
-    return {
-        'claim_id': 'TEST001',
-        'claim_amount': 150.00,
-        'diagnosis_code': 'J00',
-        'provider_id': 'PROV001'
-    }
-
-def test_normal_claim_score(engine, sample_claim):
-    provider_stats = {'PROV001': {'claim_count': 10, 'avg_amount': 150}}
-    diagnosis_stats = {'J00': {'avg_amount': 150}}
-    
-    score = engine.calculate_score(sample_claim, provider_stats, diagnosis_stats)
-    assert 0 <= score <= 100
-    assert score < 30  # Should be low risk
-
-def test_high_variance_claim(engine, sample_claim):
-    sample_claim['claim_amount'] = 500.00  # 3.3x average
-    provider_stats = {'PROV001': {'claim_count': 10, 'avg_amount': 150}}
-    diagnosis_stats = {'J00': {'avg_amount': 150}}
-    
-    score = engine.calculate_score(sample_claim, provider_stats, diagnosis_stats)
-    assert score > 50  # Should trigger high variance penalty
-```
-
-**Impact:** Ensured fraud scoring reliability with comprehensive test coverage.
-
----
-
-#### 5. Technical Architecture Comparison
-**Prompt:**
-> "Compare using PostgreSQL vs SQLite for a healthcare claims fraud detection MVP with these requirements: 30K claims initially, potential growth to 100K, deployment on Replit, read-heavy workload (90% reads), need for full-text search on diagnosis descriptions, and future need for geospatial queries on provider locations. Provide a decision matrix with pros/cons and final recommendation."
-
-**AI Response Summary:**
-| Criteria | SQLite | PostgreSQL |
-|----------|--------|------------|
-| MVP Speed | ✅ Instant setup | ⚠️ Requires setup |
-| Performance (<100K) | ✅ Sufficient | ✅ Excellent |
-| Full-Text Search | ⚠️ Limited FTS | ✅ Native support |
-| Replit Deployment | ✅ File-based | ✅ Supported |
-| Geospatial | ❌ No PostGIS | ✅ PostGIS extension |
-| Concurrent Writes | ❌ Limited | ✅ Excellent |
-
-**Decision Made:**
-Use SQLite for MVP (speed to market), plan PostgreSQL migration before production. Document migration path in README scalability section.
-
-**Impact:** Delivered working MVP 2x faster while maintaining clear production roadmap.
-
----
 
 ## 👔 Management Deliverables
 
@@ -673,10 +366,7 @@ On a recent project migrating a monolithic PHP app, I broke the work into two-we
 - If improvement: Continue with monitoring
 - If no improvement: Transition plan (exit or role change)
 
-**Real Example:**
-I managed a developer struggling with React. Diagnosed: Strong backend skills, weak frontend. Solution: Moved them to API team, brought in frontend specialist. Both thrived in aligned roles. Retention > replacement.
 
----
 
 ### 3. Ensuring On-Time Delivery & Managing Competing Priorities
 
@@ -756,24 +446,3 @@ I managed a developer struggling with React. Diagnosed: Strong backend skills, w
    - Instead of: "We need to refactor the fraud engine"
    - Say: "Improving scoring accuracy to reduce false positives by 30%, saving 10 hours/week of manual review"
 
-**Real Example:**
-For a similar dashboard project, I created a Slack channel with automated deploy notifications + screenshot. Stakeholders saw progress in real-time. Reduced status meeting time by 50%.
-
----
-
-## 📝 License
-
-This project is for demonstration purposes as part of the NHIS Fraud Auditor Dashboard assignment.
-
----
-
-## 🙏 Acknowledgments
-
-- Built as an MVP prototype for APEIRO Technical Assessment
-- Dataset: NHIS Healthcare Claims and Fraud Dataset (Kaggle)
-- AI Assistance: Claude 3.5 Sonnet via Replit Agent for rapid development
-- Deployment: Replit Platform
-
----
-
-**Built with ❤️ in 8 hours using AI-assisted rapid prototyping**

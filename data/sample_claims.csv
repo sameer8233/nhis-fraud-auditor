@@ -1,0 +1,31 @@
+ClaimID,PatientID,ProviderID,DiagnosisCode,DiagnosisDescription,ProcedureCode,ProcedureDescription,ClaimAmount,ClaimDate
+CLM001,PAT001,PROV001,J00,Acute nasopharyngitis,99213,Office visit,150.00,2024-01-15
+CLM002,PAT002,PROV002,E11.9,Type 2 diabetes without complications,99214,Office visit,250.00,2024-01-16
+CLM003,PAT003,PROV001,I10,Essential hypertension,99215,Comprehensive visit,8500.00,2024-01-17
+CLM004,PAT004,PROV003,M25.551,Pain in right hip,27130,Hip replacement,45000.00,2024-01-18
+CLM005,PAT005,PROV002,J45.909,Unspecified asthma,99213,Office visit,200.00,2024-01-19
+CLM006,PAT001,PROV004,Z00.00,General adult medical examination,99385,Annual physical,300.00,2024-01-20
+CLM007,PAT006,PROV001,K21.9,Gastro-esophageal reflux disease,99213,Office visit,180.00,2024-01-21
+CLM008,PAT007,PROV005,S52.501A,Fracture of right radius,25500,Fracture treatment,12000.00,2024-01-22
+CLM009,PAT008,PROV002,N18.3,Chronic kidney disease stage 3,99214,Office visit,350.00,2024-01-23
+CLM010,PAT009,PROV001,I25.10,Coronary artery disease,99215,Comprehensive visit,15000.00,2024-01-24
+CLM011,PAT010,PROV003,M79.3,Panniculitis,99213,Office visit,175.00,2024-01-25
+CLM012,PAT002,PROV002,E11.9,Type 2 diabetes without complications,99213,Follow-up visit,225.00,2024-01-26
+CLM013,PAT011,PROV006,J44.1,COPD with exacerbation,99284,Emergency visit,2500.00,2024-01-27
+CLM014,PAT012,PROV001,R07.9,Chest pain,99213,Office visit,200.00,2024-01-28
+CLM015,PAT013,PROV004,Z23,Immunization,90471,Vaccine administration,50.00,2024-01-29
+CLM016,PAT014,PROV002,F41.1,Generalized anxiety disorder,99213,Office visit,190.00,2024-01-30
+CLM017,PAT015,PROV005,S06.0X0A,Concussion,99284,Emergency visit,3500.00,2024-01-31
+CLM018,PAT001,PROV001,J00,Acute nasopharyngitis,99213,Follow-up visit,160.00,2024-02-01
+CLM019,PAT016,PROV003,M17.11,Osteoarthritis of right knee,27447,Knee replacement,55000.00,2024-02-02
+CLM020,PAT017,PROV002,I10,Essential hypertension,99213,Office visit,185.00,2024-02-03
+CLM021,PAT018,PROV001,K80.20,Calculus of gallbladder,47562,Cholecystectomy,28000.00,2024-02-04
+CLM022,PAT019,PROV006,J18.9,Pneumonia,99284,Emergency visit,4500.00,2024-02-05
+CLM023,PAT020,PROV002,E78.5,Hyperlipidemia,99213,Office visit,195.00,2024-02-06
+CLM024,PAT003,PROV001,I10,Essential hypertension,99213,Follow-up visit,175.00,2024-02-07
+CLM025,PAT021,PROV004,N39.0,Urinary tract infection,99213,Office visit,210.00,2024-02-08
+CLM026,PAT022,PROV005,S42.001A,Fracture of right clavicle,23500,Fracture treatment,8500.00,2024-02-09
+CLM027,PAT023,PROV002,F32.9,Major depressive disorder,99214,Office visit,280.00,2024-02-10
+CLM028,PAT024,PROV001,K29.70,Gastritis,99213,Office visit,188.00,2024-02-11
+CLM029,PAT025,PROV003,M48.06,Spinal stenosis,63030,Spinal surgery,62000.00,2024-02-12
+CLM030,PAT026,PROV002,R51,Headache,99213,Office visit,170.00,2024-02-13
